@@ -331,7 +331,7 @@ class ArchivesSpaceClient(object):
         else:
             return ''
 
-    def _fetch_instance_types_from_record(self, record):
+    def _fetch_instance_types_1_from_record(self, record):
         if not record.get('instances'):
             return ''
         elif 'container' in record['instances'][0]:
@@ -339,11 +339,33 @@ class ArchivesSpaceClient(object):
         else:
             return ''
 
-    def _fetch_instance_indicators_from_record(self, record):
+    def _fetch_instance_types_2_from_record(self, record):
+        if not record.get('instances'):
+            return ''
+        elif 'container' in record['instances'][0]:
+            try:
+                return record['instances'][0]['container']['type_2']
+            except:
+                return ''
+        else:
+            return ''
+
+    def _fetch_instance_indicators_1_from_record(self, record):
         if not record.get('instances'):
             return ''
         elif 'container' in record['instances'][0]:
             return record['instances'][0]['container']['indicator_1']
+        else:
+            return ''
+
+    def _fetch_instance_indicators_2_from_record(self, record):
+        if not record.get('instances'):
+            return ''
+        elif 'container' in record['instances'][0]:
+            try:
+                return record['instances'][0]['container']['indicator_2']
+            except:
+                return ''
         else:
             return ''
 
@@ -366,8 +388,10 @@ class ArchivesSpaceClient(object):
             full_record = self._get(record['record_uri']).json()
             dates = self._fetch_dates_from_record(full_record)
             date_expression = self._fetch_date_expression_from_record(full_record)
-            instance_type = self._fetch_instance_types_from_record(full_record)
-            instance_indicator = self._fetch_instance_indicators_from_record(full_record)
+            instance_type_1 = self._fetch_instance_types_1_from_record(full_record)
+            instance_indicator_1 = self._fetch_instance_indicators_1_from_record(full_record)
+            instance_type_2 = self._fetch_instance_types_2_from_record(full_record)
+            instance_indicator_2 = self._fetch_instance_indicators_2_from_record(full_record)
             instance_barcode = self._fetch_instance_barcodes_from_record(full_record)
 
             identifier = full_record['id_0'] if 'id_0' in full_record else full_record.get('component_id', '')
@@ -382,8 +406,10 @@ class ArchivesSpaceClient(object):
                 'date_expression': date_expression,
                 'levelOfDescription': record['level'],
                 'notes': self._format_notes(full_record),
-                'instance_type': instance_type,
-                'instance_indicator': instance_indicator,
+                'instance_type_1': instance_type_1,
+                'instance_indicator_1': instance_indicator_1,
+                'instance_type_2': instance_type_2,
+                'instance_indicator_2': instance_indicator_2,
                 'instance_barcode': instance_barcode,
             }
             if full_record.get('display_string') is not None:
@@ -414,8 +440,10 @@ class ArchivesSpaceClient(object):
         def format_record(record, level):
             dates = self._fetch_dates_from_record(record)
             date_expression = self._fetch_date_expression_from_record(record)
-            instance_type = self._fetch_instance_types_from_record(record)
-            instance_indicator = self._fetch_instance_indicators_from_record(record)
+            instance_type_1 = self._fetch_instance_types_1_from_record(record)
+            instance_indicator_1 = self._fetch_instance_indicators_1_from_record(record)
+            instance_type_2 = self._fetch_instance_types_2_from_record(record)
+            instance_indicator_2 = self._fetch_instance_indicators_2_from_record(record)
             instance_barcode = self._fetch_instance_barcodes_from_record(record)
 
             result = {
@@ -429,8 +457,10 @@ class ArchivesSpaceClient(object):
                 'date_expression': date_expression,
                 'levelOfDescription': record['level'],
                 'notes': self._format_notes(record),
-                'instance_type': instance_type,
-                'instance_indicator': instance_indicator,
+                'instance_type_1': instance_type_1,
+                'instance_indicator_1': instance_indicator_1,
+                'instance_type_2': instance_type_2,
+                'instance_indicator_2': instance_indicator_2,
                 'instance_barcode': instance_barcode,
             }
 
